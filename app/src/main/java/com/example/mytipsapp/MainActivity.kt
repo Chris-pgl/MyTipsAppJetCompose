@@ -2,6 +2,7 @@ package com.example.mytipsapp
 
 import android.R
 import android.os.Bundle
+import android.text.Layout
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,12 +12,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -114,8 +118,11 @@ fun BillForm(modifier: Modifier = Modifier,
         border = BorderStroke(width = 1.dp, color = Color.LightGray),
 
         ) {
-        Column() {
+        Column(modifier = Modifier.padding(6.dp),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.Start) {
             InputField(
+
                 valueState = totalBillState,
                 lableId = "Enter Bill",
                 enabled = true,
@@ -125,8 +132,18 @@ fun BillForm(modifier: Modifier = Modifier,
                     onValueChange(totalBillState.value.trim())
 
                     keyboardController?.hide()
+                })
+            if (validState){
+                Row(modifier = Modifier.padding(3.dp),
+                    horizontalArrangement = Arrangement.Start) {
+                    Text("Split", modifier = Modifier.align(
+                        alignment = Alignment.CenterVertically))
+                    Spacer(modifier = Modifier.width(120.dp))
+                    Row(modifier = Modifier.padding(horizontal = 3.dp)) { }
                 }
-            )
+            }else{
+                Box(){}
+            }
         }
     }
 }
