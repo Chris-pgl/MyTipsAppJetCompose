@@ -2,6 +2,7 @@ package com.example.mytipsapp
 
 import android.R
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -19,21 +20,26 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.mytipsapp.components.InputField
 import com.example.mytipsapp.ui.theme.MyTipsAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -43,7 +49,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyTipsAppTheme {
                 MyApp(){
-                    TopHeader()
+                    //TopHeader()
+                    MainContent()
                 }
             }
         }
@@ -52,7 +59,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MyApp(content: @Composable () -> Unit){
-    TopHeader()
+    content()
 }
 
 
@@ -84,14 +91,42 @@ fun TopHeader(data: Double = 134.0){
 @Preview
 @Composable
 fun MainContent(){
-    Card(modifier = Modifier.padding(2.dp)
+    BillForm(){ billAmt ->
+        Log.d("AMT", "MainContent: ${billAmt.toInt() * 100}")
+    }
+
+}
+
+@Composable
+fun BillForm(modifier: Modifier = Modifier,
+             onValueChange: (String)-> Unit = {}){
+
+    val totalBillState = remember { mutableStateOf("") }
+    val validState = remember(totalBillState.value) {
+        totalBillState.value.trim().isNotEmpty()
+    }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    Card(modifier = Modifier
+        .padding(2.dp)
         .fillMaxWidth(),
         shape = RoundedCornerShape(corner = CornerSize(8.dp)),
         border = BorderStroke(width = 1.dp, color = Color.LightGray),
 
-    ) {
+        ) {
         Column() {
+            InputField(
+                valueState = totalBillState,
+                lableId = "Enter Bill",
+                enabled = true,
+                isSingleLine = true,
+                onAction = KeyboardActions {
+                    if (!validState) return@KeyboardActions
+                    onValueChange(totalBillState.value.trim())
 
+                    keyboardController?.hide()
+                }
+            )
         }
     }
 }

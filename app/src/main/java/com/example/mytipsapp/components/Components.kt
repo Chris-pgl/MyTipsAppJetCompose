@@ -37,7 +37,7 @@ fun InputField(
         label = { Text(text = lableId) },
         leadingIcon = { Icon(imageVector = Icons.Rounded.AttachMoney, contentDescription = "Money Icon")},
         singleLine = isSingleLine,
-        textStyle = TextStyle(fontSize = 18.sp, color = MaterialTheme.colorScheme.background),
+        textStyle = TextStyle(fontSize = 18.sp),
         enabled = enabled,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeAction),
         keyboardActions = onAction,
