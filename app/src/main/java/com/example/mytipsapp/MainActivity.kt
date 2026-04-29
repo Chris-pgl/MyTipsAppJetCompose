@@ -25,6 +25,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -45,6 +48,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.mytipsapp.components.InputField
 import com.example.mytipsapp.ui.theme.MyTipsAppTheme
+import com.example.mytipsapp.widgets.RoundIconButton
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -139,7 +143,19 @@ fun BillForm(modifier: Modifier = Modifier,
                     Text("Split", modifier = Modifier.align(
                         alignment = Alignment.CenterVertically))
                     Spacer(modifier = Modifier.width(120.dp))
-                    Row(modifier = Modifier.padding(horizontal = 3.dp)) { }
+                    Row(modifier = Modifier.padding(horizontal = 3.dp),
+                        horizontalArrangement = Arrangement.End) {
+                        RoundIconButton(
+                            modifier = Modifier,
+                            imageVector = Icons.Default.Remove,
+                            onClick = {})
+
+                        RoundIconButton(
+                            modifier = Modifier,
+                            imageVector = Icons.Default.Add,
+                            onClick = {})
+
+                    }
                 }
             }else{
                 Box(){}
