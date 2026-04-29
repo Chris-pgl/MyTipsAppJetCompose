@@ -32,6 +32,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -114,6 +115,8 @@ fun BillForm(modifier: Modifier = Modifier,
         totalBillState.value.trim().isNotEmpty()
     }
     val keyboardController = LocalSoftwareKeyboardController.current
+    val sliderPositionState = remember { mutableStateOf(0f) }
+
 
     Card(modifier = Modifier
         .padding(2.dp)
@@ -137,7 +140,8 @@ fun BillForm(modifier: Modifier = Modifier,
 
                     keyboardController?.hide()
                 })
-            if (validState){
+           // if (validState){
+                //Split
                 Row(modifier = Modifier.padding(3.dp),
                     horizontalArrangement = Arrangement.Start) {
                     Text("Split", modifier = Modifier.align(
@@ -153,6 +157,12 @@ fun BillForm(modifier: Modifier = Modifier,
                                 Log.d("Icon", "BillForm: Remove ")
                             })
 
+                        //TODO add a value remember
+                        Text("2",
+                            modifier = Modifier
+                                .align(Alignment.CenterVertically)
+                                .padding(start = 9.dp, end = 9.dp))
+
                         RoundIconButton(
                             modifier = Modifier,
                             imageVector = Icons.Default.Add,
@@ -162,9 +172,32 @@ fun BillForm(modifier: Modifier = Modifier,
 
                     }
                 }
-            }else{
-                Box(){}
+                //Tip
+            Row(modifier = Modifier.padding(3.dp),
+                horizontalArrangement = Arrangement.Start
+                ) {
+                Text("Tip", modifier = Modifier
+                    .padding(horizontal = 3.dp, vertical = 12.dp),
+                    color = Color.Blue)
+                Spacer(modifier = Modifier.width(200.dp))
+                Text("€33.00",
+                    modifier = Modifier.align(alignment = Alignment.CenterVertically))
             }
+            //percentual
+            Column(verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally) {
+                Text("33%")
+                Spacer(modifier = Modifier.height(14.dp))
+
+                //slider
+                Slider(value = sliderPositionState.value,
+                    onValueChange = { newValue ->
+                        Log.d("Slider", "BillForm: $newValue ")
+                    })
+            }
+            //}else{
+            //    Box(){}
+            //}
         }
     }
 }
