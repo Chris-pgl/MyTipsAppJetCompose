@@ -9,6 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
@@ -29,6 +31,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -79,6 +82,7 @@ fun TopHeader(data: Double = 134.0){
         modifier = Modifier
             .padding(6.dp)
             .fillMaxWidth()
+            .padding(15.dp)
             .height(150.dp)
             .background(Color.LightGray, RoundedCornerShape(12.dp)),
         contentAlignment = Alignment.Center
@@ -106,6 +110,7 @@ fun MainContent(){
 
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BillForm(modifier: Modifier = Modifier,
              onValueChange: (String)-> Unit = {}){
@@ -116,7 +121,11 @@ fun BillForm(modifier: Modifier = Modifier,
     }
     val keyboardController = LocalSoftwareKeyboardController.current
     val sliderPositionState = remember { mutableStateOf(0f) }
+    val personoSplit = remember { mutableStateOf(1)}
+    val range = IntRange( start = 1, endInclusive = 100)
 
+    Column{
+    TopHeader()
 
     Card(modifier = Modifier
         .padding(2.dp)
@@ -125,9 +134,11 @@ fun BillForm(modifier: Modifier = Modifier,
         border = BorderStroke(width = 1.dp, color = Color.LightGray),
 
         ) {
-        Column(modifier = Modifier.padding(6.dp),
+        Column(
+            modifier = Modifier.padding(6.dp),
             verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.Start) {
+            horizontalAlignment = Alignment.Start
+        ) {
             InputField(
 
                 valueState = totalBillState,
@@ -140,64 +151,94 @@ fun BillForm(modifier: Modifier = Modifier,
 
                     keyboardController?.hide()
                 })
-           // if (validState){
-                //Split
-                Row(modifier = Modifier.padding(3.dp),
-                    horizontalArrangement = Arrangement.Start) {
-                    Text("Split", modifier = Modifier.align(
-                        alignment = Alignment.CenterVertically),
-                        color = Color.Blue)
-                    Spacer(modifier = Modifier.width(120.dp))
-                    Row(modifier = Modifier.padding(horizontal = 3.dp),
-                        horizontalArrangement = Arrangement.End) {
-                        RoundIconButton(
-                            modifier = Modifier,
-                            imageVector = Icons.Default.Remove,
-                            onClick = {
-                                Log.d("Icon", "BillForm: Remove ")
-                            })
-
-                        //TODO add a value remember
-                        Text("2",
-                            modifier = Modifier
-                                .align(Alignment.CenterVertically)
-                                .padding(start = 9.dp, end = 9.dp))
-
-                        RoundIconButton(
-                            modifier = Modifier,
-                            imageVector = Icons.Default.Add,
-                            onClick = {
-                                Log.d("Icon", "BillForm: Add")
-                            })
-
-                    }
-                }
-                //Tip
-            Row(modifier = Modifier.padding(3.dp),
+            // if (validState){
+            //Split
+            Row(
+                modifier = Modifier.padding(3.dp),
                 horizontalArrangement = Arrangement.Start
+            ) {
+                Text(
+                    "Split", modifier = Modifier.align(
+                        alignment = Alignment.CenterVertically
+                    ),
+                    color = Color.Blue
+                )
+                Spacer(modifier = Modifier.width(120.dp))
+                Row(
+                    modifier = Modifier.padding(horizontal = 3.dp),
+                    horizontalArrangement = Arrangement.End
                 ) {
-                Text("Tip", modifier = Modifier
-                    .padding(horizontal = 3.dp, vertical = 12.dp),
-                    color = Color.Blue)
+                    //button add and remove
+                    RoundIconButton(
+                        modifier = Modifier,
+                        imageVector = Icons.Default.Remove,
+                        onClick = {
+                            if (personoSplit.value > range.first)
+                                personoSplit.value -= 1
+                            else 1
+
+                        })
+
+                    //TODO add a value remember
+                    Text(
+                        "${personoSplit.value}",
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                            .padding(start = 9.dp, end = 9.dp)
+                    )
+
+                    RoundIconButton(
+                        modifier = Modifier,
+                        imageVector = Icons.Default.Add,
+                        onClick = {
+                            if (personoSplit.value < range.last) {
+                                personoSplit.value += 1
+                            }
+                        })
+
+                }
+            }
+            //Tip
+            Row(
+                modifier = Modifier.padding(3.dp),
+                horizontalArrangement = Arrangement.Start
+            ) {
+                Text(
+                    "Tip", modifier = Modifier
+                        .padding(horizontal = 3.dp, vertical = 12.dp),
+                    color = Color.Blue
+                )
                 Spacer(modifier = Modifier.width(200.dp))
-                Text("€33.00",
-                    modifier = Modifier.align(alignment = Alignment.CenterVertically))
+                Text(
+                    "€33.00",
+                    modifier = Modifier.align(alignment = Alignment.CenterVertically)
+                )
             }
             //percentual
-            Column(verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Text("33%")
                 Spacer(modifier = Modifier.height(14.dp))
 
                 //slider
-                Slider(value = sliderPositionState.value,
+                Slider(
+                    value = sliderPositionState.value,
                     onValueChange = { newValue ->
-                        Log.d("Slider", "BillForm: $newValue ")
-                    })
+                        sliderPositionState.value = newValue
+                    },
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+                    steps = 5,
+                    onValueChangeFinished = {
+
+                    }
+                )
             }
             //}else{
             //    Box(){}
             //}
+        }
         }
     }
 }
