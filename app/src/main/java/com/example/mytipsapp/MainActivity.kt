@@ -29,6 +29,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -64,7 +65,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-//TODO migliorare l'app, crasha se premi qualcosa prima di aggiungere il conto.
+
 
 @Composable
 fun MyApp(content: @Composable () -> Unit){
@@ -110,6 +111,7 @@ fun MainContent(){
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BillForm(modifier: Modifier = Modifier,
+
              onValueChange: (String)-> Unit = {}){
 
     val totalBillState = remember { mutableStateOf("") }
@@ -161,7 +163,7 @@ fun BillForm(modifier: Modifier = Modifier,
                     "Split", modifier = Modifier.align(
                         alignment = Alignment.CenterVertically
                     ),
-                    color = Color.Blue
+                    color = Color.White
                 )
                 Spacer(modifier = Modifier.width(120.dp))
                 Row(
@@ -172,6 +174,8 @@ fun BillForm(modifier: Modifier = Modifier,
                     RoundIconButton(
                         modifier = Modifier,
                         imageVector = Icons.Default.Remove,
+                        backgroundColor = Color.White,
+                        tint = Color.Black,
                         onClick = {
                             personSplit.value
                             if (personSplit.value > range.first)
@@ -197,6 +201,8 @@ fun BillForm(modifier: Modifier = Modifier,
                     RoundIconButton(
                         modifier = Modifier,
                         imageVector = Icons.Default.Add,
+                        backgroundColor = Color.White,
+                        tint = Color.Black,
                         onClick = {
                             personSplit.value
                             if (personSplit.value < range.last) {
@@ -220,7 +226,7 @@ fun BillForm(modifier: Modifier = Modifier,
                 Text(
                     "Tip", modifier = Modifier
                         .padding(horizontal = 3.dp, vertical = 12.dp),
-                    color = Color.Blue
+                    color = Color.White
                 )
                 Spacer(modifier = Modifier.width(200.dp))
                 Text(
