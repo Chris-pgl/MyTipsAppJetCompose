@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -50,8 +51,14 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyTipsAppTheme {
                 MyApp(){
-                    //TopHeader()
-                    MainContent()
+                    Scaffold(
+                        containerColor = Color(0xFF6200EE) //backGroundColor
+                    ) {
+                        innerPadding -> //con questo sistemo la barra sopra l'app
+
+                        //TopHeader()
+                        MainContent()
+                    }
                 }
             }
         }
@@ -144,7 +151,7 @@ fun BillForm(modifier: Modifier = Modifier,
 
                     keyboardController?.hide()
                 })
-            // if (validState){
+            if (validState){
             //Split
             Row(
                 modifier = Modifier.padding(3.dp),
@@ -253,9 +260,9 @@ fun BillForm(modifier: Modifier = Modifier,
                     }
                 )
             }
-            //}else{
-            //    Box(){}
-            //}
+            }else{
+                Box(){}
+            }
         }
         }
     }
